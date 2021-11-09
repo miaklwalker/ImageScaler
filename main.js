@@ -9,8 +9,8 @@ let pixels = [];
 let color, gui;
 const imgTypes =[
     "image/png",
-    "image/jpeg",
-    "image/bmp",
+    //"image/jpeg",
+    //"image/bmp",
 ]
 let system = {
     fileName: "",
@@ -161,8 +161,6 @@ function exportCanvas() {
     downloadLink.click();
     document.body.removeChild(downloadLink);
 }
-
-
 
 function update() {
     let img = dotifyCanvas(cacheContext, system.downScaling, cacheContext.getImageData(0, 0, cache.width, cache.height));
