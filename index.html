@@ -9,9 +9,10 @@
     <title>Flash Image Helper</title>
 </head>
 <body>
-    <input type="file" id="file" name="file" accept="image/*" onchange="init(this)" />
+    <input type="file" class="visually-hidden" id="file" name="file" accept="image/*" onchange="init(this)" />
     <h1>Flash Image Helper</h1>
-    <canvas id="screen"></canvas>
+    <label for="file" id="dropbox">Select some files</label>
+    <canvas class="visually-hidden" id="screen"></canvas>
     <script src="main.js"></script>
 </body>
 </html>
