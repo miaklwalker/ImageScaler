@@ -11,8 +11,10 @@
 <body>
     <input type="file" class="visually-hidden" id="file" name="file" accept="image/*" onchange="init(this)" />
     <h1>Flash Image Helper</h1>
-    <label for="file" id="dropbox">Select some files</label>
-    <canvas class="visually-hidden" id="screen"></canvas>
+    <div class="container" id="dropbox">
+        <label id="label" for="file" >Select some files</label>
+        <canvas class="visually-hidden" id="screen"></canvas>
+    </div>
     <script src="main.js"></script>
 </body>
 </html>
