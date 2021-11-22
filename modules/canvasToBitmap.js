@@ -7,8 +7,7 @@
     ***************************
     
 */
-
-var CanvasToBMP = {
+let CanvasToBMP = {
 
     /**
      * Convert a canvas element to ArrayBuffer containing a BMP file
@@ -19,9 +18,9 @@ var CanvasToBMP = {
      * @param {HTMLCanvasElement} canvas - the canvas element to convert
      * @return {ArrayBuffer}
      */
-    toArrayBuffer: function(canvas) {
+    toArrayBuffer:(canvas) => {
   
-      var w = canvas.width,
+      let w = canvas.width,
           h = canvas.height,
           w4 = w * 4,
           idata = canvas.getContext("2d").getImageData(0, 0, w, h),
@@ -106,37 +105,5 @@ var CanvasToBMP = {
       return "data:image/bmp;base64," + btoa(bs);
     }
   };
-  
 
-  var wantType = "image/bmp";
-  var dataUri = canvas.toDataURL(wantType);
-  if (dataUri.indexOf(wantType) < 0) {  // or use substr etc. data: + mime
-       // Format NOT supported - provide workaround/inform user
-       // See update below for workaround (or replacement)
-  }
-
-  var bmpDataUri = CanvasToBMP.toDataURL(canvas);  
-  
-  // -------- DEMO CODE -------------
-
-var canvas = document.querySelector("canvas"),
-w = canvas.width,
-h = canvas.height,
-ctx = canvas.getContext("2d"),
-gr = ctx.createLinearGradient(0, 0, w, h),
-img = new Image();
-
-gr.addColorStop(0, "hsl(" + (Math.random() * 360) + ", 90%, 70%)"); 
-gr.addColorStop(1, "hsl(" + (Math.random() * 360) + ", 100%, 30%)"); 
-ctx.fillStyle = gr;
-ctx.fillRect(0, 0, w, h);
-
-// append image from the data-uri returned by the CanvasToBMP code below:
-img.src = CanvasToBMP.toDataURL(canvas);
-document.body.appendChild(img);// returns an data-URI
-
-
-/*
-<h2>Canvas left, BMP from canvas as image right</h2>
-<canvas width="299" height="200"></canvas>
-*/
+  export default CanvasToBMP;
