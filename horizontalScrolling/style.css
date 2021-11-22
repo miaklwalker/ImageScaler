@@ -1,0 +1,114 @@
+:root {
+    --text-color: #111;
+    --bg-color: #b9b3a9
+}
+
+* {
+    margin: 0;
+    padding: 0
+}
+
+body {
+    background: var(--bg-color);
+    color: var(--text-color);
+    font-family: termina, sans-serif;
+    max-width: 100%;
+    overflow-x: hidden;
+    overscroll-behavior: none;
+    transition: .3s ease-out;
+    width: 100%
+}
+
+section:not(#sectionPin) {
+    grid-gap: 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    margin: auto;
+    min-height: 100vh;
+    padding: 50px 10vw;
+    place-items: center;
+    position: relative;
+    width: 100%
+}
+
+img {
+    height: 80vh;
+    object-fit: cover;
+    width: auto
+}
+
+h1 {
+    font-size: 5rem;
+    font-weight: 800;
+    hyphens: auto;
+    left: 10vw;
+    line-height: 1;
+    margin-bottom: 1rem;
+    overflow-wrap: break-word;
+    position: absolute;
+    top: 10vw;
+    z-index: 4
+}
+
+@media (max-width:768px) {
+    h1 {
+        font-size: 16vw
+    }
+}
+
+h1 span {
+    display: block
+}
+
+h2 {
+    font-size: 2rem;
+    max-width: 400px
+}
+
+.credit {
+    font-family: Termina, sans-serif
+}
+
+.credit a {
+    color: var(--text-color)
+}
+
+* {
+    box-sizing: border-box
+}
+
+#sectionPin {
+    background: var(--text-color);
+    color: var(--bg-color);
+    left: 0;
+    overflow: hidden
+}
+
+#sectionPin,.pin-wrap {
+    display: flex;
+    height: 100vh
+}
+
+.pin-wrap {
+    align-items: center;
+    /* justify-content: flex-start; */
+    padding: 50px 10vw
+}
+
+.pin-wrap>* {
+    min-width: 60vw;
+    padding: 0 5vw
+}
+
+p {
+    bottom: 10vw;
+    line-height: 1.5;
+    position: absolute;
+    right: 10vw;
+    width: 200px
+}
+
+section.landing {
+    background: url(https://source.unsplash.com/AVzByhROPbs/1600x900);
+    color: var(--bg-color)
+}
