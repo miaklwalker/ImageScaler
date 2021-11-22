@@ -1,10 +1,15 @@
 canvas {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
 
+}
+body{
+  display: grid;
+  grid-template-rows:10% 1fr;
+  grid-template-areas: "header" "main";
+  min-height:100vh;
+  height:100vh;
+  place-content: center center;
+  place-items: center center;
+}
 
 h1{
   text-align: center;
@@ -27,10 +32,6 @@ h2{
 
 label{
   text-align: center;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate3d(-50%,-50%,0) ;
   width: 200px;
   height: 40px;
   background-color:rgb(55, 182, 76);

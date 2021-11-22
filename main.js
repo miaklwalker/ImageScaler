@@ -6,14 +6,18 @@ const mainContext = outputCanvas.getContext("2d");
 const cache = document.createElement("canvas");
 const cacheContext = cache.getContext("2d");
 
+let systemCache = new Map();
+
 
 let pixels = [];
 let color, gui,dropbox;
+
 const imgTypes =[
     "image/png",
     "image/jpeg",
     "image/bmp",
-]
+];
+
 let system = {
     fileName: "",
     imageScale: 1,
@@ -21,7 +25,7 @@ let system = {
     imgType: "image/png",
     grid:true,
     exportCanvas
-}
+};
 
 // strip dot extensions from file name but leave the file name
 function stripExtensions(fileName) {
@@ -127,6 +131,9 @@ function dotifyCanvas(ctx, downScaling, imageData) {
     return temp;
 }
 
+
+
+
 let getAverageColorOfPixels = (pixels) => {
     let r = 0;
     let g = 0;
@@ -170,6 +177,16 @@ function exportCanvas() {
 }
 
 function update() {
+    let key = `${system.fileName}${system.downScaling}${system.imageScale}`;
+    if(systemCache.has(key)){
+        let img = systemCache.get(key);
+        addImageToCanvas(img, outputCanvas, system.imageScale);
+    }else{        
+        let img = dotifyCanvas(cacheContext, system.downScaling, cacheContext.getImageData(0, 0, cache.width, cache.height));
+        systemCache.set(key, img);
+        addImageToCanvas(img, outputCanvas, system.imageScale);
+
+    }
     let img = dotifyCanvas(cacheContext, system.downScaling, cacheContext.getImageData(0, 0, cache.width, cache.height));
     console.log(img.width, img.height);
     addImageToCanvas(img, outputCanvas, system.imageScale);
@@ -177,29 +194,26 @@ function update() {
 
 async function init(f) {
     try {
+        system = {
+            fileName: "",
+            imageScale: 1,
+            downScaling: 1,
+            imgType: "image/png",
+            exportCanvas
+        }
         let img = await readImageFromInput(f);
         cache.width = img.width;
         cache.height = img.height;
-
-        outputCanvas.classList.remove("visually-hidden");
-        document.getElementById("dropbox").classList.add("visually-hidden")
-
-
-        addImageToCanvas(img, cache);
-        update();
         if (!gui) {
+            outputCanvas.classList.remove("visually-hidden");
+            document.getElementById("label").classList.add("visually-hidden")
             buildGUI();
         }else{
             gui.destroy();
-            system = {
-                fileName: "",
-                imageScale: 1,
-                downScaling: 1,
-                imgType: "image/png",
-                exportCanvas
-            }
             buildGUI();
         }
+        addImageToCanvas(img, cache);
+        update();
         color = getAverageColorOfPixels(pixels);
         document.body.style.backgroundColor = color;
     } catch (err) {
@@ -208,29 +222,32 @@ async function init(f) {
 
 }
 
+function setUpDropbox() {
+    dropbox = document.getElementById("dropbox");
+    dropbox.addEventListener("dragenter", dragenter, false);
+    dropbox.addEventListener("dragover", dragover, false);
+    dropbox.addEventListener("drop", drop, false);
 
-
-dropbox = document.getElementById("dropbox");
-dropbox.addEventListener("dragenter", dragenter, false);
-dropbox.addEventListener("dragover", dragover, false);
-dropbox.addEventListener("drop", drop, false);
-
-function dragenter(e) {
-    e.stopPropagation();
-    e.preventDefault();
-}
-  
-function dragover(e) {
-    e.stopPropagation();
-    e.preventDefault();
-}
-
-function drop(e) {
-    e.stopPropagation();
-    e.preventDefault();
-  
-    const dt = e.dataTransfer;
+    function dragenter(e) {
+        e.stopPropagation();
+        e.preventDefault();
+    }
+      
+    function dragover(e) {
+        e.stopPropagation();
+        e.preventDefault();
+    }
     
-    init(dt);
+    function drop(e) {
+        e.stopPropagation();
+        e.preventDefault();
+      
+        const dt = e.dataTransfer;
+        
+        init(dt);
+    }
 }
+setUpDropbox();
+
+
 
