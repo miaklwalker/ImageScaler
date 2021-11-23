@@ -27,6 +27,7 @@ let system = {
     imageScale: 1,
     downScaling: 1,
     imgType: "image/png",
+    grid:true,
     exportCanvas
 };
 
