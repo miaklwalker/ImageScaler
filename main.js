@@ -1,4 +1,3 @@
-
 import addImageToCanvas from "./modules/addImageToCanvas.js"
 import dotifyCanvas from "./modules/dotifyCanvas.js";
 import getAverageColorOfPixels from "./modules/getAverageColor.js";
@@ -8,6 +7,7 @@ import readImageFromInput from "./modules/readImageFromInput.js";
 
 const outputCanvas = document.getElementById("screen");
 const mainContext = outputCanvas.getContext("2d");
+const inputButton_button = document.getElementById("file");
 
 const cache = document.createElement("canvas");
 const cacheContext = cache.getContext("2d");
@@ -28,17 +28,18 @@ let system = {
     downScaling: 1,
     imgType: "image/png",
     grid:true,
-    exportCanvas
+    exportCanvas:()=>exportCanvas(cache,this)
 };
 function buildGUI() {
     gui = new dat.GUI({
         name: 'GUI'
     });
-    let controls = gui.addFolder('File Options');
-    controls.open();
-    controls.add(system,"fileName")
+    let controls = gui
+        .addFolder('File Options');
+        controls.open();
+        controls.add(system,"fileName")
         .onChange((e) => system.fileName = stripExtensions(e));
-    controls.add(system, "imgType", imgTypes)
+        controls.add(system, "imgType", imgTypes)
         .onChange((e) => system.imgType = e);
 
     let downScaling = gui.addFolder('Scaling')
@@ -47,7 +48,9 @@ function buildGUI() {
         .onFinishChange(update)
     downScaling.add(system, 'downScaling', 1, 10, 1)
         .onFinishChange(update);
-    gui.add(system, "exportCanvas").name("Export");
+    gui
+        .add(system, "exportCanvas")
+        .name("Export");
 }
 
 function update() {
@@ -56,12 +59,14 @@ function update() {
     if(systemCache.has(key)){
         img = systemCache.get(key);
         addImageToCanvas(img, outputCanvas, system.imageScale,pixels);
-    }else{        
+    }else{
         img = dotifyCanvas(cacheContext, system.downScaling, cacheContext.getImageData(0, 0, cache.width, cache.height),pixels);
         systemCache.set(key, img);
         addImageToCanvas(img, outputCanvas, system.imageScale);
     }
 }
+
+
 async function init(f) {
     try {
         system = {
@@ -69,7 +74,7 @@ async function init(f) {
             imageScale: 1,
             downScaling: 1,
             imgType: "image/png",
-            exportCanvas
+            exportCanvas:()=>exportCanvas(cache,system)
         }
         let img = await readImageFromInput(f,system);
         cache.width = img.width;
@@ -92,6 +97,9 @@ async function init(f) {
     }
 
 }
+
+inputButton_button.addEventListener("change",e=>init(e.target))
+
 function setUpDropbox() {
     dropbox = document.getElementById("dropbox");
     dropbox.addEventListener("dragenter", dragenter, false);
@@ -102,18 +110,18 @@ function setUpDropbox() {
         e.stopPropagation();
         e.preventDefault();
     }
-      
+
     function dragover(e) {
         e.stopPropagation();
         e.preventDefault();
     }
-    
+
     function drop(e) {
         e.stopPropagation();
         e.preventDefault();
-      
+
         const dt = e.dataTransfer;
-        
+
         init(dt);
     }
 }
